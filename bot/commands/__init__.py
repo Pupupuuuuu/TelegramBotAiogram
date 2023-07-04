@@ -1,18 +1,20 @@
-__all__ = ['register_user_commands']
+__all__ = ['register_user_commands', 'bot_commands']
 
 from aiogram import Router
+from aiogram.filters import Command
 from aiogram.filters.command import CommandStart
+from aiogram import F
 
+from bot.commands.help import help_command, help_func
 from bot.commands.start import start
-
-
-bot_commands = (
-    ("start", "Начало работы с ботом", "Хорошая команда, чтобы начать работу с ботом"),
-    ("help", "Помощь и справка", "Поможет, если это будет нужно")
-)
+from bot.commands.settings import setting_command
 
 
 def register_user_commands(router: Router) -> None:
-    # router.massage.register(start, Command(command=['start']))
+    # router.message.register(start, Command(command=['start']))
     router.message.register(start, CommandStart())
+    router.message.register(help_command, Command(commands=['help']))
+    router.message.register(start, F.text == 'Старт')
+    router.message.register(help_func, F.text == 'Помощь')
+    router.message.register(setting_command, Command(commands=['settings']))
 
